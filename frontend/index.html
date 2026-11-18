@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja MVC — Produtos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Aviso enquanto a API "acorda" no plano gratuito do Render -->
+  <div id="carregando" class="carregando oculto">
+    <div class="spinner"></div>
+    <p>Conectando ao servidor…<br><small>A primeira requisição pode levar até 1 minuto.</small></p>
+  </div>
+
+  <!-- ===== TELA DE ACESSO (login / cadastro) ===== -->
+  <main id="tela-acesso" class="acesso">
+    <div class="cartao cartao-acesso">
+      <h1>📦 Loja MVC</h1>
+      <p class="subtitulo">Entre para gerenciar seus produtos</p>
+
+      <div class="abas" role="tablist">
+        <button type="button" class="aba ativa" data-aba="login">Entrar</button>
+        <button type="button" class="aba" data-aba="cadastro">Criar conta</button>
+      </div>
+
+      <form id="form-login" class="form">
+        <label>E-mail
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label>Senha
+          <input type="password" name="senha" required autocomplete="current-password">
+        </label>
+        <button type="submit" class="botao primario">Entrar</button>
+      </form>
+
+      <form id="form-cadastro" class="form oculto">
+        <label>Nome
+          <input type="text" name="nome" required minlength="2" autocomplete="name">
+        </label>
+        <label>E-mail
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label>Senha <small>(mínimo 6 caracteres)</small>
+          <input type="password" name="senha" required minlength="6" autocomplete="new-password">
+        </label>
+        <button type="submit" class="botao primario">Criar conta</button>
+      </form>
+
+      <p id="msg-acesso" class="mensagem" role="alert"></p>
+    </div>
+  </main>
+
+  <!-- ===== TELA DE PRODUTOS (CRUD) ===== -->
+  <div id="tela-app" class="oculto">
+    <header class="topo">
+      <strong>📦 Loja MVC</strong>
+      <div class="topo-usuario">
+        <span id="nome-usuario"></span>
+        <button type="button" id="btn-sair" class="botao secundario">Sair</button>
+      </div>
+    </header>
+
+    <main class="conteudo">
+      <!-- Formulário: serve para cadastrar E para editar -->
+      <section class="cartao">
+        <h2 id="titulo-form">Novo produto</h2>
+        <form id="form-produto" class="form-produto">
+          <input type="hidden" name="produtoId">
+          <label class="campo-nome">Nome
+            <input type="text" name="nome" required maxlength="100" placeholder="Ex.: Caneta azul">
+          </label>
+          <label>Preço (R$)
+            <input type="number" name="preco" required min="0" step="0.01" placeholder="0,00">
+          </label>
+          <label>Estoque
+            <input type="number" name="estoque" required min="0" step="1" value="0">
+          </label>
+          <div class="acoes-form">
+            <button type="submit" id="btn-salvar" class="botao primario">Cadastrar</button>
+            <button type="button" id="btn-cancelar" class="botao secundario oculto">Cancelar</button>
+          </div>
+        </form>
+        <p id="msg-produto" class="mensagem" role="alert"></p>
+      </section>
+
+      <!-- Listagem -->
+      <section class="cartao">
+        <div class="cabecalho-lista">
+          <h2>Meus produtos <span id="contador" class="contador">0</span></h2>
+          <input type="search" id="busca" placeholder="Buscar por nome…">
+        </div>
+
+        <div class="tabela-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th class="num">Preço</th>
+                <th class="num">Estoque</th>
+                <th class="acoes">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="lista-produtos"></tbody>
+          </table>
+          <p id="lista-vazia" class="vazio oculto">Nenhum produto cadastrado ainda. Use o formulário acima.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

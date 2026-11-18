@@ -1,0 +1,39 @@
+// MODEL no nível do banco de dados.
+// As tabelas usam o prefixo "loja_" para poderem conviver no mesmo banco
+// da primeira API (que já tem uma tabela "produtos").
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id       Int       @id @default(autoincrement())
+  nome     String    @db.VarChar(100)
+  email    String    @unique @db.VarChar(150)
+  senha    String    @db.VarChar(100) // guarda o HASH da senha, nunca a senha em texto
+  criadoEm DateTime  @default(now())
+  produtos Produto[]
+
+  @@map("loja_usuarios")
+}
+
+model Produto {
+  id           Int      @id @default(autoincrement())
+  nome         String   @db.VarChar(100)
+  preco        Decimal  @db.Decimal(10, 2)
+  estoque      Int      @default(0)
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  // Cada produto pertence a um usuário
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@map("loja_produtos")
+}
